@@ -17,6 +17,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public abstract class AbstractMagicProjectile extends Projectile implements AntiMagicSusceptible {
@@ -106,6 +107,11 @@ public abstract class AbstractMagicProjectile extends Projectile implements Anti
             impactParticles(getX(), getY(), getZ());
             getImpactSound().ifPresent(this::doImpactSound);
         }
+    }
+
+    @Override
+    public boolean shouldBeSaved() {
+        return super.shouldBeSaved() && !Objects.equals(getRemovalReason(), RemovalReason.UNLOADED_TO_CHUNK);
     }
 
     protected void doImpactSound(SoundEvent sound) {
